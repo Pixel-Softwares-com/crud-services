@@ -12,10 +12,10 @@
   "require": {
     "php": "^7.3|^8.0",
     "laravel/framework": "^8.75",
-    "muhammedaldrubi/authorization-management": "^1.0",
-    "muhammedaldrubi/validator-lib": "^1.0",
-    "muhammedaldrubi/custom-file-system": "^1.0.3",
-    "muhammedaldrubi/file-info-data-manager": "^1.0"
+    "pixel-softwares/authorization-management": "^1.0",
+    "pixel-softwares/validator-lib": "^1.0",
+    "pixel-softwares/custom-file-system": "^1.0.3",
+    "Pixel-Softwares-com/file-info-data-manager": "^1.0"
   },
   "autoload" : {
     "psr-4": {
@@ -32,19 +32,19 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:MuhammedALDRUBI/authorization-management.git"
+      "url": "git@github.com:Pixel-Softwares-com/authorization-management.git"
     },
     {
       "type": "vcs",
-      "url": "git@github.com:MuhammedALDRUBI/validator-lib.git"
+      "url": "git@github.com:Pixel-Softwares-com/validator-lib.git"
     },
     {
       "type": "vcs",
-      "url": "git@github.com:MuhammedALDRUBI/custom-file-system.git"
+      "url": "git@github.com:Pixel-Softwares-com/custom-file-system.git"
     },
     {
       "type": "vcs",
-      "url": "git@github.com:MuhammedALDRUBI/file-info-data-manager.git"
+      "url": "git@github.com:Pixel-Softwares-com/file-info-data-manager.git"
     }
   ]
 }
