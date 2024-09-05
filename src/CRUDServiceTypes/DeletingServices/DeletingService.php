@@ -48,7 +48,7 @@ abstract class DeletingService extends CRUDService
     }
     protected function getDeletingFailedResponseMessage() : string
     {
-        return "Failed to delete models have provided keys";
+        return "Selected Items Can Not Be Deleted As Some Items Are Related To Other Records ";
     }
     protected function errorRespondingHandling( ) : JsonResponse
     {
