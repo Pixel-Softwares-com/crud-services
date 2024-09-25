@@ -7,12 +7,13 @@ use CRUDServices\FilesOperationsHandlers\FilesHandler;
 use CRUDServices\FilesOperationsHandlers\FilesUploadingHandler\FilesUploadingHandler;
 use CRUDServices\FilesOperationsHandlers\OldFilesDeletingHandler\OldFilesDeletingHandler;
 use CRUDServices\Traits\CRUDCustomisationGeneralHooks;
+use CRUDServices\Traits\ResponseHelpers;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class CRUDService
 {
-    use CRUDCustomisationGeneralHooks;
+    use CRUDCustomisationGeneralHooks , ResponseHelpers;
 
     protected FilesHandler | FilesUploadingHandler | OldFilesDeletingHandler | null $filesHandler = null;
     protected ?Model $Model ;

@@ -59,7 +59,7 @@ trait ParticipatingRelationshipMethods
     {
         $RelationshipRequestData = $this->getRelationshipRequestDataArray($dataRow , $relationship->getRelationshipName());
 
-        if(  $relationship->hasPivotColumns()  )
+        if(  $relationship->hasPivotColumns() || $relationship->DoesNeedPivotForeignKeyRequestAppending() )
         {
             return $this->getParticipatingRelationshipForeignIDsAssocArray($RelationshipRequestData , $relationship);
         }

@@ -108,15 +108,17 @@ abstract class StoringService extends DataWriterCRUDService
 
             /** Response After getting Success */
             return Response::success($this->getSuccessResponseData(), [$this->getModelCreatingSuccessMessage()]);
-        } catch (Exception $e)
+        } catch (Exception $exception)
         {
             /** When An Exception Is Thrown ....  Database Transaction Will Be Rollback */
 
             DB::rollBack();
 
-            $this->doBeforeErrorResponding();
+            $this->doBeforeErrorResponding($exception);
+            
             /** Response The Error Messages By Exception Messages */
-            return Response::error([$e->getMessage()]);
+            return $this->errorRespondingHandling($exception);
+
         }
     }
 

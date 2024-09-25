@@ -50,23 +50,7 @@ abstract class DeletingService extends CRUDService
     protected function getDeletingFailedResponseMessage() : string
     {
         return "Failed to delete models have provided keys";
-    }
-    protected function getDeletingFailedResponseCode() : int
-    {
-        return 500;
-    }
-    protected function errorRespondingHandling(?Exception $e = null) : JsonResponse
-    { 
-        $code = $e->getCode();
-        if($code == 0)
-        {
-            $code = $this->getDeletingFailedResponseCode();
-        }
-
-        return Response::error($e->getMessage() , $code , $this->getNotDeletedArray());
-    }
-
-
+    } 
     protected function initForceDeletingStg() : DeletingStrategy
     {
         return new ForceDeletingStg($this->modelsToDelete);
@@ -124,10 +108,10 @@ abstract class DeletingService extends CRUDService
                 //Response After getting Success
                 return Response::success($this->getSuccessResponseData() , [$this->getModelDeletingSuccessMessage()]);
 
-        }catch (Exception $e)
-        {
-                $this->doBeforeErrorResponding($e);
-                return $this->errorRespondingHandling($e);
+        }catch (Exception $exception)
+        { 
+                $this->doBeforeErrorResponding($exception);
+                return $this->errorRespondingHandling($exception , $this->getNotDeletedArray());
 
         }
     }

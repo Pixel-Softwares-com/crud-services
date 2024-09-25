@@ -2,10 +2,13 @@
 
 namespace CRUDServices\CRUDComponents\CRUDRelationshipComponents;
 
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
 class   ParticipatingRelationshipComponent extends RelationshipComponent
 {
     protected array $pivotColumns = [];
     protected bool $hasPivotColumns = false;
+    protected ?String $pivotForignKeyName = null;
 
 
     public static function create(string $relationshipName , string $foreignKeyName = "" ) : ParticipatingRelationshipComponent
@@ -35,4 +38,17 @@ class   ParticipatingRelationshipComponent extends RelationshipComponent
     {
         return $this->pivotColumns;
     }
+
+    public function appendPivotForeignKeyToRequestData(string $pivotForignKeyName ) : self
+    {
+        $this->pivotForignKeyName = $pivotForignKeyName;
+        return $this;
+    }
+    
+    public function DoesNeedPivotForeignKeyRequestAppending() : bool
+    {
+        return (bool) $this->pivotForignKeyName;
+    }
+
+
 }
