@@ -35,7 +35,7 @@ class ForceDeletingStg extends  DeletingStrategy
         $this->initFilesDeleter()->restartOldFilesHandler();
     }
 
-    protected function forceDeleteModel(Model $model) : bool
+    protected function forceDeleteModel(Model $model) : void
     {
         try {
             DB::beginTransaction();
@@ -44,7 +44,9 @@ class ForceDeletingStg extends  DeletingStrategy
 
             if(!$model->forceDelete())
             {
-                throw new Exception("Failed to delete model"); // need to exit function with exception to rollback database transaction then returning false
+                $modelClass = get_class($model);
+                $modelKey = $model->getKey();
+                throw new Exception("Failed to delete $modelClass typed model on key = $modelKey "); // need to exit function with exception to rollback database transaction then returning false
             }
 
             $this->markAsDeleted($model );
@@ -53,15 +55,14 @@ class ForceDeletingStg extends  DeletingStrategy
             //If No Exception Is Thrown From Previous Operations ... All Thing Is OK
             //So Database Transaction Will Be Commit
             DB::commit();
+ 
 
-            return true;
-
-        }catch (Exception | QueryException $e)
+        }catch (Exception | QueryException $exception)
         {
             //When An Exception Is Thrown ....  Database Transaction Will Be Rollback
             DB::rollBack();
-            $this->restartFilesDeleter();
-            return false;
+            $this->restartFilesDeleter(); 
+            $this->throwIfInDebugingMode($exception);
         }
     }
 
@@ -75,7 +76,7 @@ class ForceDeletingStg extends  DeletingStrategy
              $this->forceDeleteModel($model);
         }
 
-        return empty($this->notDeleted);
+        return !$this->hasSomeDeletingFails();
     }
 
 }

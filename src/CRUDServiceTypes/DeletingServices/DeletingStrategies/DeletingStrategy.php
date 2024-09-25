@@ -2,6 +2,7 @@
 
 namespace CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -127,4 +128,16 @@ abstract class DeletingStrategy
         return $this->notDeleted;
     }
 
+    protected function throwIfInDebugingMode(Exception $exception) : void
+    {
+        if(config("app.debug"))
+        {
+            throw $exception;
+        }
+    }
+
+    public function hasSomeDeletingFails() : bool
+    {
+        return !empty($this->notDeleted);
+    }
 }

@@ -44,15 +44,26 @@ abstract class DeletingService extends CRUDService
 
     protected function getNotDeletedArray() : array
     {
-        return $this->initDeletingStg()?->getNotDeleted() ;
+        return $this->initDeletingStg()->getNotDeleted() ;
     }
+
     protected function getDeletingFailedResponseMessage() : string
     {
         return "Failed to delete models have provided keys";
     }
-    protected function errorRespondingHandling( ) : JsonResponse
+    protected function getDeletingFailedResponseCode() : int
     {
-        return Response::error( $this->getDeletingFailedResponseMessage() , 500 , $this->getNotDeletedArray());
+        return 500;
+    }
+    protected function errorRespondingHandling(?Exception $e = null) : JsonResponse
+    { 
+        $code = $e->getCode();
+        if($code == 0)
+        {
+            $code = $this->getDeletingFailedResponseCode();
+        }
+
+        return Response::error($e->getMessage() , $code , $this->getNotDeletedArray());
     }
 
 
@@ -80,10 +91,14 @@ abstract class DeletingService extends CRUDService
     protected function DeleteConveniently() : void
     {
         $deletingStg = $this->initDeletingStg();
-        $deletingResult = $deletingStg->delete();
-        if(!$deletingResult)
+
+        /**
+         * This will be false if some models are not deleted without development enviroment error or database constraints error
+         * so need to show the end user the models not deleted
+         */
+        if(! $deletingStg->delete() )
         {
-            throw new Exception( "Deleting Failed" ); // Exception to catch .. not to return to end user .. so no need to init the custom exception class
+            throw new Exception( $this->getDeletingFailedResponseMessage() ); 
         }
     }
 
@@ -111,8 +126,8 @@ abstract class DeletingService extends CRUDService
 
         }catch (Exception $e)
         {
-                $this->doBeforeErrorResponding();
-                return $this->errorRespondingHandling();
+                $this->doBeforeErrorResponding($e);
+                return $this->errorRespondingHandling($e);
 
         }
     }

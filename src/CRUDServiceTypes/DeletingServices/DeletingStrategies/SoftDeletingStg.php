@@ -15,37 +15,42 @@ class SoftDeletingStg extends DeletingStrategy
     /**
      * @throws Exception
      */
-    protected function deleteModelClassRowsSoftly(string $modelClass , array $keys  ) : bool
+    protected function deleteModelClassRowsSoftly(string $modelClass , array $keys  ) : void
     {
         if(! $modelDeletedAtColumn = $this->modelDeletedAtColumns[ $modelClass ] ?? null )
         {
             /**
-             * We don't want to catch this exception ... it is development env exception ,
+             * We don't want to show the end user this exception ... it is development env exception ,
              * and must be solved before pushing to product env
              */
-            throw new Exception("Failed to delete the model softly ... It doesn't have a deleted_at database column !");
+            throw new Exception("Failed to delete the $modelClass typed model softly ... It doesn't have a deleted_at database column !");
         }
 
 
         if(!$modelKeyName = $this->modelKeyNames[$modelClass] ?? null)
-        {
+       {
+            /**
+             * We don't want to show the end user this exception ... it is development env exception ,
+             * and must be solved before pushing to product env
+             */
             throw new Exception("Failed to delete the model softly ... No Model key name is set!");
         }
 
         try {
+
             if( $modelClass::whereIn($modelKeyName , $keys )->update([ $modelDeletedAtColumn => now()  ]))
             {
                 $this->markAsDeleted($modelClass , $keys);
-                return true;
             }
-            return false;
 
         }catch ( QueryException $exception)
         {
-           return false;
+            //want to get developement error in the development enviroment only ... it maybe a foreik key error 
+            //so it can be fixed in the enviroment by editing the constrainst
+            $this->throwIfInDebugingMode($exception);
         }
     }
-
+ 
     /**
      * @throws Exception
      */
@@ -56,7 +61,7 @@ class SoftDeletingStg extends DeletingStrategy
             $this->deleteModelClassRowsSoftly($modelClass , $keys);
         }
 
-        return empty($this->notDeleted);
+        return !$this->hasSomeDeletingFails();
     }
     protected function getModelDeletedAtColumn(Model $model) : string
     {

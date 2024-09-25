@@ -2,6 +2,8 @@
 
 namespace CRUDServices\Traits;
 
+use Exception;
+
 trait CRUDCustomisationGeneralHooks
 {
 
@@ -27,7 +29,7 @@ trait CRUDCustomisationGeneralHooks
     {
         return [];
     }
-    protected function doBeforeErrorResponding() : void
+    protected function doBeforeErrorResponding(?Exception $e = null) : void
     {
         return;
     }
