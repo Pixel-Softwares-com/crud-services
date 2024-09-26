@@ -72,7 +72,7 @@ abstract class StoringService extends DataWriterCRUDService
         /**Saving Model Instance To Database After Setting All Fillables Values And Changing Files 's UploadedFile Object's value To The New Path Of File*/
         if($this->Model->save())
         {
-            $this->HandleModelRelationships($this->data , $this->Model);
+            $this->HandleModelRelationships($dataRow , $this->Model);
         }
         return $this;
     }

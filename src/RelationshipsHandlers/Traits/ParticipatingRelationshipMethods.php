@@ -15,11 +15,9 @@ trait ParticipatingRelationshipMethods
 
     protected function getParticipatingRelationshipForeignIDsIndexedArray(array $RelationshipRequestData) : array
     {
-        return array_filter($RelationshipRequestData ,function($id)
-        {
-            return is_numeric( $id );
-        });
+        return array_filter($RelationshipRequestData, 'is_numeric');
     }
+    
     protected function appendParsedParticipatingRelationshipRow(array $dataRow ,  ParticipatingRelationshipComponent $relationship , array $arrayToOverride = []) : array
     {
         $foreignColumnName = $relationship->getForeignKeyName() ;

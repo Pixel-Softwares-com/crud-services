@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class   ParticipatingRelationshipComponent extends RelationshipComponent
 {
     protected array $pivotColumns = [];
-    protected bool $hasPivotColumns = false;
     protected ?String $pivotForignKeyName = null;
 
 
@@ -18,7 +17,7 @@ class   ParticipatingRelationshipComponent extends RelationshipComponent
 
     public function hasPivotColumns() : bool
     {
-        return $this->hasPivotColumns;
+        return !empty($this->getPivotColumns());
     }
     /**
      * @param array $pivotColumns
@@ -27,7 +26,6 @@ class   ParticipatingRelationshipComponent extends RelationshipComponent
     public function setPivotColumns(array $pivotColumns): ParticipatingRelationshipComponent
     {
         $this->pivotColumns = $pivotColumns;
-        $this->hasPivotColumns = true;
         return $this;
     }
 
