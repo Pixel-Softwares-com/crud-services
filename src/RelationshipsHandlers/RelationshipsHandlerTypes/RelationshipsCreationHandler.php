@@ -18,7 +18,7 @@ class RelationshipsCreationHandler extends RelationshipsHandler
      * @return bool
      * @throws Exception
      */
-    protected function OwnedRelationshipRowsChildClassHandling(Model $model , OwnedRelationshipComponent $relationship , array $relationshipMultipleRows ): bool
+    protected function OwnedRelationshipRowsChildClassHandling(Model $model , OwnedRelationshipComponent $relationship , array $relationshipMultipleRows  ): void
     {
         foreach ($relationshipMultipleRows as $row)
         {
@@ -31,16 +31,17 @@ class RelationshipsCreationHandler extends RelationshipsHandler
             {
                 $this->HandleModelRelationships( $row ,  $RelationshipModelInstance);
             }
-        }
-        return true;
+        } 
     }
 
     /**
      * @throws Exception
      */
-    protected function ParticipatingRelationshipRowsChildClassHandling(Model $model , ParticipatingRelationshipComponent $relationship  , array $ParticipatingRelationshipFinalData ): bool
+    protected function ParticipatingRelationshipRowsChildClassHandling(Model $model , ParticipatingRelationshipComponent $relationship  , array $ParticipatingRelationshipFinalData ): void
     {
-        $model->{$relationship->getRelationshipName()}()->attach( $ParticipatingRelationshipFinalData );
-        return true;
+        if(!empty($ParticipatingRelationshipFinalData))
+        {
+            $model->{$relationship->getRelationshipName()}()->attach( $ParticipatingRelationshipFinalData );
+        }
     }
 }

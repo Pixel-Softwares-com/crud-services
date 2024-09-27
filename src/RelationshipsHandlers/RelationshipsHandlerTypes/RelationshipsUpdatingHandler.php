@@ -103,7 +103,7 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
      * @return bool
      * @throws Exception
      */
-    protected function updateSingleModel(Model $model ,  array $data , OwnedRelationshipComponent $relationship ) : bool
+    protected function updateSingleModel(Model $model ,  array $data , OwnedRelationshipComponent $relationship ) : void
     {
         $this->validateRelationshipSingleRowKeys($data ,$relationship , $model);
 
@@ -113,7 +113,6 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
             Helpers::throwException( "Failed To Update Relationship Entry !");
         }
         $this->HandleModelRelationships( $data ,  $model);
-        return true;
     }
 
     /**
@@ -124,7 +123,7 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
      * @return bool
      * @throws Exception
      */
-    protected function startToUpdateModels(array $UpdatableModelDataMap , OwnedRelationshipComponent $relationship): bool
+    protected function startToUpdateModels(array $UpdatableModelDataMap , OwnedRelationshipComponent $relationship): void
     {
         foreach ($UpdatableModelDataMap as $ModelInfoArray)
         {
@@ -133,7 +132,6 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
                 $this->updateSingleModel( $ModelInfoArray["model"] ,  $ModelInfoArray["data"] , $relationship);
             }
         }
-        return true;
     }
 
     protected function prepareNewModelsToCreation(Model $parentModel , string $relationship) : self
@@ -204,12 +202,6 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
             $this->addToModelMaps($model);
         });
 
-        // if(!$this->modelsCollection){return $this;}
-
-        // foreach ($this->modelsCollection as $model)
-        // {
-        //     $this->addToModelMaps($model);
-        // }
         return $this;
     }
 
@@ -254,7 +246,7 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
      * @return bool
      * @throws Exception
      */
-    protected function OwnedRelationshipRowsChildClassHandling(Model $model, OwnedRelationshipComponent $relationship , array $relationshipMultipleRows ) : bool
+    protected function OwnedRelationshipRowsChildClassHandling(Model $model, OwnedRelationshipComponent $relationship , array $relationshipMultipleRows   ) : void
     {
         $this->restartUpdater();
         $this->DataRowsArrayClassification($relationshipMultipleRows , $relationship->getUpdatingConditionColumns() );
@@ -262,7 +254,7 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
              ->CollectionModelsClassification()
              ->prepareNewModelsToCreation($model, $relationship->getRelationshipName() );
         $this->deletedModelsHandling();
-        return $this->startToUpdateModels($this->UpdatableModelDataMap , $relationship);
+        $this->startToUpdateModels($this->UpdatableModelDataMap , $relationship);
     }
     protected function restartUpdater() : void
     {
@@ -275,12 +267,10 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
      * @param Model $model
      * @param ParticipatingRelationshipComponent $relationship
      * @param array $ParticipatingRelationshipFinalData
-     * @return bool
      * @throws Exception
      */
-    protected function ParticipatingRelationshipRowsChildClassHandling(Model $model, ParticipatingRelationshipComponent $relationship , array $ParticipatingRelationshipFinalData): bool
+    protected function ParticipatingRelationshipRowsChildClassHandling(Model $model, ParticipatingRelationshipComponent $relationship , array $ParticipatingRelationshipFinalData): void
     {
         $model->{$relationship->getRelationshipName()}()->sync( $ParticipatingRelationshipFinalData );
-        return true;
     }
 }

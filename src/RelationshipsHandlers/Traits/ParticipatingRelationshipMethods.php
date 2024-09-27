@@ -10,14 +10,14 @@ use Exception;
 
 trait ParticipatingRelationshipMethods
 {
-    abstract protected function ParticipatingRelationshipRowsChildClassHandling(Model $model , ParticipatingRelationshipComponent $relationship ,array $ParticipatingRelationshipFinalData ) : bool;
+    abstract protected function ParticipatingRelationshipRowsChildClassHandling(Model $model , ParticipatingRelationshipComponent $relationship ,array $ParticipatingRelationshipFinalData ) : void;
 
 
-    protected function getParticipatingRelationshipForeignIDsIndexedArray(array $RelationshipRequestData) : array
+    protected function getParticipatingRelationshipForeignIDsIndexedArray(array $RelationshipRequestData ) : array
     {
         return array_filter($RelationshipRequestData, 'is_numeric');
     }
-    
+
     protected function appendParsedParticipatingRelationshipRow(array $dataRow ,  ParticipatingRelationshipComponent $relationship , array $arrayToOverride = []) : array
     {
         $foreignColumnName = $relationship->getForeignKeyName() ;
@@ -38,10 +38,11 @@ trait ParticipatingRelationshipMethods
     /**
      * @throws Exception
      */
-    protected function getParticipatingRelationshipForeignIDsAssocArray(array $RelationshipRequestData , ParticipatingRelationshipComponent $relationship) : array
+    protected function getParticipatingRelationshipForeignIDsAssocArray( ParticipatingRelationshipComponent $relationship , array $RelationshipRequestData  = []) : array
     {
         $rows = [];
         $RelationshipDataRows = $this->convertToMultipleArray( $RelationshipRequestData );
+  
         foreach ($RelationshipDataRows as $row)
         {
             $this->validateRelationshipSingleRowKeys($row , $relationship);
@@ -53,13 +54,18 @@ trait ParticipatingRelationshipMethods
     /**
      * @throws Exception
      */
-    protected function getParticipatingRelationshipFinalData(array $dataRow , ParticipatingRelationshipComponent $relationship ) : array | null
+    protected function getParticipatingRelationshipFinalData(array $dataRow , ParticipatingRelationshipComponent $relationship ) : array  
     {
         $RelationshipRequestData = $this->getRelationshipRequestDataArray($dataRow , $relationship->getRelationshipName());
 
+        if(empty($RelationshipRequestData))
+        {
+            return [];
+        }
+
         if(  $relationship->hasPivotColumns() || $relationship->DoesNeedPivotForeignKeyRequestAppending() )
         {
-            return $this->getParticipatingRelationshipForeignIDsAssocArray($RelationshipRequestData , $relationship);
+            return $this->getParticipatingRelationshipForeignIDsAssocArray($relationship , $RelationshipRequestData );
         }
 
         return $this->getParticipatingRelationshipForeignIDsIndexedArray($RelationshipRequestData);
@@ -78,13 +84,14 @@ trait ParticipatingRelationshipMethods
         if($this->checkIfRelationshipDataSent($dataRow , $relationship->getRelationshipName()))
         {
             /**
-             * It will be handled if its data sent with request only
+             * It only will be handled if its data sent with request 
              */
             $ParticipatingRelationshipFinalData = $this->getParticipatingRelationshipFinalData($dataRow , $relationship);
             $this->ParticipatingRelationshipRowsChildClassHandling($model , $relationship ,$ParticipatingRelationshipFinalData );
         }
         return $this;
     }
+
     protected function IsParticipatingRelationshipComponent($relationship) : bool
     {
         return $relationship instanceof ParticipatingRelationshipComponent;

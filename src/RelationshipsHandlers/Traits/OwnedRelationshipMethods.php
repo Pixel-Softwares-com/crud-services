@@ -34,7 +34,7 @@ trait OwnedRelationshipMethods
      * @param array $relationshipMultipleRows
      * @return bool
      */
-    abstract protected function OwnedRelationshipRowsChildClassHandling(Model $model  , OwnedRelationshipComponent $relationship , array $relationshipMultipleRows) : bool;
+    abstract protected function OwnedRelationshipRowsChildClassHandling(Model $model  , OwnedRelationshipComponent $relationship , array $relationshipMultipleRows  ) : void;
 
     /**
      * @return FilesUploadingHandler
@@ -71,7 +71,7 @@ trait OwnedRelationshipMethods
 
     protected function handleForeignKeyAppending(array $relationshipRows , Model $parentModel  , OwnedRelationshipComponent $relationship) : array
     {
-        if(!$relationship->DoesNeedForeignKeyRequestAppending())
+        if(!$relationship->DoesNeedForeignKeyRequestAppending() || empty($relationshipRows))
         {
             return $relationshipRows;
         }
@@ -87,6 +87,15 @@ trait OwnedRelationshipMethods
         return $relationshipRows;
     }
 
+    protected function getRelationshipRequestData(array $dataRow, string $relationshipName) : array 
+    {
+        $RelationshipRequestDataArray = $this->getRelationshipRequestDataArray($dataRow, $relationshipName);
+
+        return !empty($RelationshipRequestDataArray) 
+               ? $this->convertToMultipleArray($RelationshipRequestDataArray)
+               : [];
+    }
+
     /**
      * @param Model $model
      * @param OwnedRelationshipComponent $relationship
@@ -97,17 +106,9 @@ trait OwnedRelationshipMethods
     {
         $relationshipName =  $relationship->getRelationshipName();
 
-        /** The relationship only will be handled if its data sent with request */
+        /** The relationship only will be handled if its data sent with the request data */
         if($this->checkIfRelationshipDataSent($dataRow , $relationshipName))
-        {
-            /**
-             * 
-             * @tocheck if this @todo realy needed
-             * 
-             * @todo edit it to do this if condition just for creating a new relationship ... because getRelationshipRequestData returns an empty array if the relationship data isn't sent
-             * and must avoid creating an empty relationship row in creation case
-             */
-
+        { 
             $relationshipRows = $this->getRelationshipRequestData($dataRow ,$relationshipName);
             $relationshipRows = $this->handleForeignKeyAppending($relationshipRows , $model , $relationship);
             $this->OwnedRelationshipRowsChildClassHandling($model , $relationship , $relationshipRows );

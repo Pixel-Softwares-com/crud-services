@@ -70,25 +70,38 @@ abstract class RelationshipsHandler
     {
         return Arr::isList($array) && is_array(Arr::first($array));
     }
-    protected function convertToMultipleArray(array $array) : array
+    
+    protected function filterEmptySubArrays(array $array) : array
     {
-        return $this->isItMultiRowedArray($array) ? $array : [$array];
+        return array_filter($array , function($subArray)
+               {
+                    return !empty($subArray);
+               });
     }
 
+    protected function convertToMultipleArray(array $array) : array
+    {
+        if($this->isItMultiRowedArray($array))
+        {
+            return $this->filterEmptySubArrays($array);
+        }
+
+        return [ $array ];
+    }
+
+    protected function isRelationshipRequestDataInValidForm($data) : bool
+    {
+        return is_array($data);
+    }
     protected function getRelationshipRequestDataArray(array $dataRow ,string $relationshipName ) : array
     {
-        if($this->checkIfRelationshipDataSent($dataRow , $relationshipName) && is_array($dataRow[$relationshipName]) )
+        if($this->checkIfRelationshipDataSent($dataRow , $relationshipName) && $this->isRelationshipRequestDataInValidForm($dataRow[$relationshipName]) )
         {
             return $dataRow[$relationshipName] ;
         }
         return [];
     }
-    protected function getRelationshipRequestData(array $dataRow, string $relationshipName) : array | null
-    {
-        $RelationshipRequestDataArray = $this->getRelationshipRequestDataArray($dataRow, $relationshipName);
-        return $this->convertToMultipleArray($RelationshipRequestDataArray);
-    }
-
+ 
     static public function DoesItOwnRelationships( Model $model ): bool
     {
         return $model instanceof OwnsRelationships;
