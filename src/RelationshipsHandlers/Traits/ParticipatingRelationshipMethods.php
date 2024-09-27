@@ -63,7 +63,9 @@ trait ParticipatingRelationshipMethods
             return [];
         }
 
-        if(  $relationship->hasPivotColumns() || $relationship->DoesNeedPivotForeignKeyRequestAppending() )
+        if(  $relationship->hasPivotColumns() 
+            //    || $relationship->DoesNeedPivotForeignKeyRequestAppending() //commented now ===> for removing later
+            )
         {
             return $this->getParticipatingRelationshipForeignIDsAssocArray($relationship , $RelationshipRequestData );
         }
