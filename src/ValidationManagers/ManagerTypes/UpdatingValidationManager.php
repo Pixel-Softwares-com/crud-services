@@ -29,11 +29,13 @@ class UpdatingValidationManager extends ValidationManager
         }
         return $singleDataRow;
     }
+    
     public function validateSingleModelRowKeys(array $singleDataRow = []): ValidationManager
     {
         $singleDataRow = $this->primaryKeyHandling($singleDataRow , $this->model);
         return parent::validateSingleModelRowKeys($singleDataRow);
     }
+
     public function validateRelationshipSingleRowKeys(RelationshipComponent $relationship, array $singleDataRow = [] , ?Model $relationshipModel = null): ValidationManager
     {
         $singleDataRow = $this->primaryKeyHandling($singleDataRow , $relationshipModel);

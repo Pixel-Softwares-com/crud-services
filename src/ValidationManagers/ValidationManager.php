@@ -144,14 +144,13 @@ abstract class ValidationManager
      */
     protected function getRelationshipKeyValidationRules(NeedsRelationshipsKeyAdvancedValidation $requestForm , RelationshipComponent $relationship , array $singleDataRow = []) : array
     {
-        $RelationshipsDBValidationRules = $requestForm->getRelationshipsKeyAdvancedValidationRules($singleDataRow);
-        return $RelationshipsDBValidationRules[$relationship->getRelationshipName()] ?? [];
+        return $requestForm->getRelationshipKeyAdvancedValidationRules($relationship->getRelationshipName() , $singleDataRow);
     }
 
     /**
      * @param RelationshipComponent $relationship
      * @param array $singleDataRow
-     * @param Model|null $relationshipModel
+     * @param Model|null $relationshipModel (this parameter is used in child class )
      * @return $this
      * @throws Exception
      */
