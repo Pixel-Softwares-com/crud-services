@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class   ParticipatingRelationshipComponent extends RelationshipComponent
 {
-    protected array $pivotColumns = [];
-    //protected ?String $pivotForignKeyName = null;
+    protected array $pivotColumns = []; 
 
 
     public static function create(string $relationshipName , string $foreignKeyName = "" ) : ParticipatingRelationshipComponent
@@ -35,18 +34,6 @@ class   ParticipatingRelationshipComponent extends RelationshipComponent
     public function getPivotColumns(): array
     {
         return $this->pivotColumns;
-    }
-
-    // public function appendPivotForeignKeyToRequestData(string $pivotForignKeyName ) : self
-    // {
-    //     $this->pivotForignKeyName = $pivotForignKeyName;
-    //     return $this;
-    // }
-    
-    // public function DoesNeedPivotForeignKeyRequestAppending() : bool
-    // {
-    //     return (bool) $this->pivotForignKeyName;
-    // }
-
+    }  
 
 }

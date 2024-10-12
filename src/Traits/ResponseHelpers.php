@@ -9,8 +9,12 @@ use Illuminate\Support\Facades\Response;
 trait ResponseHelpers
 {
 
-    protected function isValidHttpCode(int $code) : bool
+    protected function isValidHttpCode($code) : bool
     {
+        /**
+         * code maybe a http valid code or not ... it is the code comes with the exception while throwing it
+         */
+        $code = intval($code);
         return $code >= 100 && $code < 512;
     }
     protected function getOperationFailingResponseCode() : int
@@ -23,6 +27,8 @@ trait ResponseHelpers
 
         if(!$this->isValidHttpCode($code))
         {
+            /** Once if the code is sql error code or any invalid http response code  ... a default code will be returned to end user */
+            
             $code = $this->getOperationFailingResponseCode();
         }
 
