@@ -12,9 +12,9 @@
   "require": {
     "php": "^7.3|^8.0",
     "laravel/framework": "^8.75",
-    "pixel-softwares/authorization-management": "^1.0.1",
-    "pixel-softwares/validator-lib": "^1.0.1",
-    "pixel-softwares/custom-file-system": "^1.0.1",
+    "pixel-softwares/authorization-management": "^1.0.10",
+    "pixel-softwares/validator-lib": "^1.0.6",
+    "pixel-softwares/custom-file-system": "^1.0.4",
     "pixel-softwares/file-info-data-manager": "^1.0.1"
   },
   "autoload" : {
