@@ -89,6 +89,14 @@ abstract class RelationshipsHandler
         return [ $array ];
     }
 
+    protected function filterNullValues(array $data) : array
+    {
+        return array_filter($data , function($el)
+               {
+                    return !is_null($el);     
+               });
+    }
+
     protected function isRelationshipRequestDataInValidForm($data) : bool
     {
         return is_array($data);
@@ -97,7 +105,8 @@ abstract class RelationshipsHandler
     {
         if($this->checkIfRelationshipDataSent($dataRow , $relationshipName) && $this->isRelationshipRequestDataInValidForm($dataRow[$relationshipName]) )
         {
-            return $dataRow[$relationshipName] ;
+            $data = $dataRow[$relationshipName] ; 
+            return $this->filterNullValues($data);
         }
         return [];
     }
