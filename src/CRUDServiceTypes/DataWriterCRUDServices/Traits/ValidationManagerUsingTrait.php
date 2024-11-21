@@ -19,6 +19,12 @@ trait ValidationManagerUsingTrait
         return $this;
     }
 
+    public function useContextData(array $data) : self
+    {
+        $this->validationManager->setValidatorData($data);
+        return $this;
+    }
+
     /**
      * @param array $row
      * @return DataWriterCRUDService
