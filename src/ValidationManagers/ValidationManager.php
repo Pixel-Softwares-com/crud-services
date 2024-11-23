@@ -69,7 +69,10 @@ abstract class ValidationManager
              */
             $this->validator = new JSONValidator($this->baseRequestFormClass);
         }
-        return $this->validator;
+
+        //return the validatior after passing the request form class
+        return $this->validator->changeRequestClass($this->baseRequestFormClass);
+        
     }
 
     /**
