@@ -36,9 +36,9 @@ class UpdatingValidationManager extends ValidationManager
         return parent::validateSingleModelRowKeys($singleDataRow);
     }
 
-    public function validateRelationshipSingleRowKeys(RelationshipComponent $relationship, array $singleDataRow = [] , ?Model $relationshipModel = null): ValidationManager
+    public function validateRelationshipSingleRowKeys(RelationshipComponent | string $relationshipName , array $singleDataRow = []  , ?Model $relationshipModel = null) : self
     {
         $singleDataRow = $this->primaryKeyHandling($singleDataRow , $relationshipModel);
-        return parent::validateRelationshipSingleRowKeys($relationship, $singleDataRow);
+        return parent::validateRelationshipSingleRowKeys($relationshipName, $singleDataRow);
     }
 }

@@ -145,9 +145,14 @@ abstract class ValidationManager
      * @param array $singleDataRow
      * @return array
      */
-    protected function getRelationshipKeyValidationRules(NeedsRelationshipsKeyAdvancedValidation $requestForm , RelationshipComponent $relationship , array $singleDataRow = []) : array
+    protected function getRelationshipKeyValidationRules(NeedsRelationshipsKeyAdvancedValidation $requestForm , RelationshipComponent | string $relationshipName, array $singleDataRow = []) : array
     {
-        return $requestForm->getRelationshipKeyAdvancedValidationRules($relationship->getRelationshipName() , $singleDataRow);
+        if($relationshipName instanceof RelationshipComponent)
+        {
+            $relationshipName = $relationshipName->getRelationshipName();
+        }
+        
+        return $requestForm->getRelationshipKeyAdvancedValidationRules($relationshipName , $singleDataRow);
     }
 
     /**
@@ -157,14 +162,14 @@ abstract class ValidationManager
      * @return $this
      * @throws Exception
      */
-    public function validateRelationshipSingleRowKeys(RelationshipComponent $relationship , array $singleDataRow = []  , ?Model $relationshipModel = null) : self
+    public function validateRelationshipSingleRowKeys(RelationshipComponent | string $relationshipName , array $singleDataRow = []  , ?Model $relationshipModel = null) : self
     {
         /** Getting the object prop in Validator .... so no new object is initialized */
         $requestForm = $this->initValidator()->getRequestFormOb();
 
         if($requestForm instanceof NeedsRelationshipsKeyAdvancedValidation)
         {
-            $relationshipDBValidationRules = $this->getRelationshipKeyValidationRules($requestForm , $relationship , $singleDataRow) ;
+            $relationshipDBValidationRules = $this->getRelationshipKeyValidationRules($requestForm , $relationshipName , $singleDataRow) ;
             $this->validateSingleRowKeys($singleDataRow , $relationshipDBValidationRules);
         }
         return $this;
