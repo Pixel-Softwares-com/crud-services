@@ -81,7 +81,7 @@ trait ParticipatingRelationshipMethods
      */
     protected function HandleParticipatingRelationshipRows( Model $model , ParticipatingRelationshipComponent $relationship , array $dataRow ) : self
     {
-        if($this->checkIfRelationshipDataSent($dataRow , $relationship->getRelationshipName()))
+        if($this->doesRelationshipNeedHandling($dataRow , $relationship->getRelationshipName()))
         {
             /**
              * It only will be handled if its data sent with request 

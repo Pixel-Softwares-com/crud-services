@@ -103,14 +103,24 @@ abstract class RelationshipsHandler
     }
     protected function getRelationshipRequestDataArray(array $dataRow ,string $relationshipName ) : array
     {
-        if($this->checkIfRelationshipDataSent($dataRow , $relationshipName) && $this->isRelationshipRequestDataInValidForm($dataRow[$relationshipName]) )
-        {
-            $data = $dataRow[$relationshipName] ; 
-            return $this->filterNullValues($data);
+        if(
+            $this->checkIfRelationshipDataSent($dataRow , $relationshipName) 
+            &&
+            $this->isRelationshipRequestDataInValidForm($relationshipData =$dataRow[$relationshipName]) 
+          )
+        { 
+            return $this->filterNullValues($relationshipData);
         }
         return [];
     }
  
+    protected function doesRelationshipNeedHandling(array $dataRow, string $relationshipName) : bool
+    {
+        return $this->checkIfRelationshipDataSent($dataRow , $relationshipName)
+               &&
+               $dataRow[$relationshipName] !== null;
+    }
+
     static public function DoesItOwnRelationships( Model $model ): bool
     {
         return $model instanceof OwnsRelationships;

@@ -107,7 +107,7 @@ trait OwnedRelationshipMethods
         $relationshipName =  $relationship->getRelationshipName();
 
         /** The relationship only will be handled if its data sent with the request data */
-        if($this->checkIfRelationshipDataSent($dataRow , $relationshipName))
+        if($this->doesRelationshipNeedHandling($dataRow , $relationshipName))
         { 
             $relationshipRows = $this->getRelationshipRequestData($dataRow ,$relationshipName);
             $relationshipRows = $this->handleForeignKeyAppending($relationshipRows , $model , $relationship);
