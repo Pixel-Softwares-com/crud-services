@@ -25,24 +25,7 @@ trait FileInfoProcessingMethods
         $fileInfo["filePath"] = $fileInfo["FolderName"] . "/" . $fileInfo["fileName"];
         return $fileInfo;
     }
-
-    protected function oldFilesHandling(array $fileInfo) : bool
-    {
-        if($fileInfo["oldFilesDeleting"])
-        {
-            $this->initOldFilesDeletingHandler();
-            $FolderName = $fileInfo["FolderName"];
-            $fileOldName = $this->getFileOldName( $fileInfo["ModelPathPropName"] );
-            if(!$fileOldName){return false;}
-
-            foreach ($this->getFileNameRelevantPathArray($fileOldName , $FolderName) as $fileName => $fileRelevantPath)
-            {
-                $this->oldFilesDeletingHandler->addOldFileToDeletingQueue($fileName , $fileRelevantPath);
-            }
-        }
-        return true;
-    }
-
+ 
     /**
      * @param UploadedFile $file
      * @return string
@@ -161,7 +144,6 @@ trait FileInfoProcessingMethods
         if(!$fileInfo){return null;}
 
         $fileInfo = $this->setFileNameAndUploadingPath($fileInfo );
-        $this->oldFilesHandling($fileInfo);
         return $fileInfo;
     }
 }

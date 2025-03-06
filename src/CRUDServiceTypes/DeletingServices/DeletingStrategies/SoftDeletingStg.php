@@ -3,6 +3,7 @@
 namespace CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies;
 
 use CRUDServices\Helpers\Helpers;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
@@ -23,7 +24,7 @@ class SoftDeletingStg extends DeletingStrategy
              * We don't want to show the end user this exception ... it is development env exception ,
              * and must be solved before pushing to product env
              */
-            throw new Exception("Failed to delete the $modelClass typed model softly ... It doesn't have a deleted_at database column !");
+            dd("Failed to delete the $modelClass typed model softly ... It doesn't have a deleted_at database column !");
         }
 
 
@@ -33,18 +34,28 @@ class SoftDeletingStg extends DeletingStrategy
              * We don't want to show the end user this exception ... it is development env exception ,
              * and must be solved before pushing to product env
              */
-            throw new Exception("Failed to delete the model softly ... No Model key name is set!");
+            dd("Failed to delete the model softly ... No Model key name is set!");
         }
 
         try {
+
+            DB::beginTransaction();
+            $this->doAfterOperationStart();
+            $this->doAfterDbTransactionStart();
 
             if( $modelClass::whereIn($modelKeyName , $keys )->update([ $modelDeletedAtColumn => now()  ]))
             {
                 $this->markAsDeleted($modelClass , $keys);
             }
 
+            $this->doBeforeDbTransactionCommiting();
+            DB::commit();
+
         }catch ( QueryException $exception)
         {
+            
+            DB::rollBack();
+
             //want to get developement error in the development enviroment only ... it maybe a foreik key error 
             //so it can be fixed in the enviroment by editing the constrainst
             $this->throwIfInDebugingMode($exception);

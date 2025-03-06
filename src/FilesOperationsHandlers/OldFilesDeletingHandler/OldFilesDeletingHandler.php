@@ -7,6 +7,7 @@ use CRUDServices\FilesOperationsHandlers\OldFilesDeletingHandler\Traits\FileInfo
 use CRUDServices\FilesOperationsHandlers\OldFilesDeletingHandler\Traits\FilesInfoValidationMethods;
 use CRUDServices\FilesOperationsHandlers\OldFilesDeletingHandler\Traits\OldFilesInfoManagerMethods;
 use Illuminate\Database\Eloquent\Model;
+use CRUDServices\Jobs\OldFilesDeleterJob;
 
 class OldFilesDeletingHandler extends FilesHandler
 {
@@ -57,4 +58,23 @@ class OldFilesDeletingHandler extends FilesHandler
         }
         return $model;
     }
+
+    
+    protected function dispatchDeleterJob() : void
+    {
+        $deleterJob = new OldFilesDeleterJob();
+        dispatch($deleterJob);
+    }
+
+    public function setOldFilesToDeletingQueue() : bool
+    {
+        if(!$this->informOldFilesInfoManager())
+        {
+            return false;
+        }
+         
+        $this->dispatchDeleterJob();
+        return $this->restartOldFilesHandler();
+    }
+
 }

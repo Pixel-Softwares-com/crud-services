@@ -2,6 +2,7 @@
 
 namespace CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies;
 
+use CRUDServices\CRUDServiceTypes\DeletingServices\Traits\DeletingStrategyCustomHooks;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -9,13 +10,19 @@ use Illuminate\Support\Collection;
 
 abstract class DeletingStrategy
 {
+    use DeletingStrategyCustomHooks;
+    
     protected Collection  $modelsToDelete  ;
     protected array $notDeleted = [];
     protected bool $modelMultiTypeDeleting = false;
+    
     public function __construct(Collection $modelsToDelete)
     {
         $this->setModelsToDelete($modelsToDelete);
     }
+    
+    abstract public function delete() : bool;
+
     protected function setModelMultiTypeDeletingStatus() : void
     {
         $modelTypes = array_keys( $this->notDeleted );
@@ -108,9 +115,6 @@ abstract class DeletingStrategy
             $this->markNumericKeyAsDeleted($modelClass , $keyToMark);
         }
     }
-
-
-    abstract public function delete() : bool;
 
     protected function getNotDeletedSingleTypeArray() : array
     {

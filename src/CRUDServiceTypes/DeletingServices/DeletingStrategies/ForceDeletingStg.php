@@ -39,6 +39,10 @@ class ForceDeletingStg extends  DeletingStrategy
     {
         try {
             DB::beginTransaction();
+            
+            $this->doAfterOperationStart();
+            $this->doAfterDbTransactionStart();
+            
             $this->prepareModelFilesToDelete($model);
             $this->prepareOwnedRelationshipFilesToDelete($model);
 
@@ -51,6 +55,8 @@ class ForceDeletingStg extends  DeletingStrategy
 
             $this->markAsDeleted($model );
             $this->deleteFiles();
+
+            $this->doBeforeDbTransactionCommiting();
 
             //If No Exception Is Thrown From Previous Operations ... All Thing Is OK
             //So Database Transaction Will Be Commit

@@ -82,6 +82,22 @@ class FilesUploadingHandler extends FilesHandler
         return $this->oldFilesDeletingHandler;
     }
 
+    protected function oldFilesHandling(array $fileInfo) : bool
+    {
+        if($fileInfo["oldFilesDeleting"])
+        {
+            $this->initOldFilesDeletingHandler();
+            $FolderName = $fileInfo["FolderName"];
+            $fileOldName = $this->getFileOldName( $fileInfo["ModelPathPropName"] );
+            if(!$fileOldName){return false;}
+
+            foreach ($this->getFileNameRelevantPathArray($fileOldName , $FolderName) as $fileName => $fileRelevantPath)
+            {
+                $this->oldFilesDeletingHandler->addOldFileToDeletingQueue($fileName , $fileRelevantPath);
+            }
+        }
+        return true;
+    }
     /**
      * @throws Exception
      */
@@ -91,6 +107,8 @@ class FilesUploadingHandler extends FilesHandler
 
         /** Setting File To CustomFileUploader Uploading Queue To Upload it later when all data operation is done */
         $this->addFileToUploadingQueue( $RequestKeyName , $fileInfo["FolderName"] , $fileInfo["filePath"] , $fileInfo["multipleUploading"]);
+
+        $this->oldFilesHandling($fileInfo);
 
         $this->setUploadedFileDataRowMetaData($RequestKeyName , $fileInfo);
     }

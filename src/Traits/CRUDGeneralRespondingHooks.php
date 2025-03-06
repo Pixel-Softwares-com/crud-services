@@ -4,19 +4,14 @@ namespace CRUDServices\Traits;
 
 use Exception;
 
-trait CRUDCustomisationGeneralHooks
+trait CRUDGeneralRespondingHooks
 {
 
     /**
     * Methods For Customizing Some Operations If There Is Need To That
     *
     */
-
-    protected function doBeforeOperationStart(): void
-    {
-        return;
-    }
-
+ 
     protected function doBeforeSuccessResponding() : void
     {
         return;

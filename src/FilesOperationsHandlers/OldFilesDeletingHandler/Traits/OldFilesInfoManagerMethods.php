@@ -3,7 +3,6 @@
 namespace CRUDServices\FilesOperationsHandlers\OldFilesDeletingHandler\Traits;
 
 use CRUDServices\FilesOperationsHandlers\OldFilesDeletingHandler\OldFilesDeletingHandler;
-use CRUDServices\Jobs\OldFilesDeleterJob;
 use CRUDServices\OldFilesInfoManager\OldFilesInfoManager;
 
 trait OldFilesInfoManagerMethods
@@ -34,14 +33,8 @@ trait OldFilesInfoManagerMethods
         return true;
     }
 
-    protected function dispatchDeleterJob() : void
-    {
-        $deleterJob = new OldFilesDeleterJob();
-        dispatch($deleterJob);
-    }
-
-    public function setOldFilesToDeletingQueue() : bool
-    {
+    protected function informOldFilesInfoManager() : bool
+    { 
         $this->initOldFilesInfoManager();
         foreach ($this->filesToDelete as $fileName => $fileRelevantPath)
         {
@@ -49,10 +42,7 @@ trait OldFilesInfoManagerMethods
         }
 
         /** If Failed To Write Anything To Info JSON File ... There Is A Problem And Nothing To Do By job*/
-        if(!$this->oldFilesInfoManager->SaveChanges()){return false;}
-
-        $this->dispatchDeleterJob();
-        return $this->restartOldFilesHandler();
+        return $this->oldFilesInfoManager->SaveChanges();
     }
 
 }

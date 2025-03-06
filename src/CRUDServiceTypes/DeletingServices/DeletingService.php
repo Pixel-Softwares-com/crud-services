@@ -8,7 +8,6 @@ use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\ForceDelet
 use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\SoftDeletingStg;
 use CRUDServices\CRUDServiceTypes\DeletingServices\Traits\DeletingServiceCustomHooks;
 use CRUDServices\CRUDServiceTypes\DeletingServices\Traits\HelperTrait;
-use CRUDServices\Traits\CRUDCustomisationGeneralHooks;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
@@ -17,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class DeletingService extends CRUDService
 {
-    use CRUDCustomisationGeneralHooks , HelperTrait,   DeletingServiceCustomHooks;
+    use  HelperTrait,   DeletingServiceCustomHooks;
     protected Collection  $modelsToDelete  ;
 
     protected bool $forcedDeletingOperation = true;
@@ -51,6 +50,28 @@ abstract class DeletingService extends CRUDService
     {
         return "Delete Action is not allowed as one/some of data you want to delete is related to other records in the program";
     } 
+
+    protected function delegateDBHooksExecutingIntoDeletingStrategy() : void
+    {
+        if($this->deletingStrategy)
+        {
+            $this->deletingStrategy->callAfterOperaionStart(function(DeletingStrategy $deletingStg)
+            {
+                $this->doAfterOperationStart($deletingStg);
+            });
+
+            $this->deletingStrategy->callAfterDbTransactionStart(function(DeletingStrategy $deletingStg)
+            {
+                $this->doAfterDbTransactionStart($deletingStg);
+            });
+
+            $this->deletingStrategy->callBeforeDBTransactionCommiting(function(DeletingStrategy $deletingStg)
+            {
+                $this->doBeforeDbTransactionCommiting($deletingStg);
+            });
+        }
+    }
+
     protected function initForceDeletingStg() : DeletingStrategy
     {
         return new ForceDeletingStg($this->modelsToDelete);
@@ -64,6 +85,9 @@ abstract class DeletingService extends CRUDService
         if(!$this->deletingStrategy)
         {
             $this->deletingStrategy = $this->forcedDeletingOperation ? $this->initForceDeletingStg() : $this->initSoftDeletingStg();
+            
+            //to delegate executing the hooks on every new initialization of DeletingStrategy
+            $this->delegateDBHooksExecutingIntoDeletingStrategy();
         }
         return  $this->deletingStrategy;
     }
@@ -99,7 +123,7 @@ abstract class DeletingService extends CRUDService
         try {
                 $this->setForcedDeletingStatus($forcedDeleting);
 
-                $this->doBeforeOperationStart();
+                $this->doAfterOperationStart();
 
                 $this->DeleteConveniently();
 

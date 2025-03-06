@@ -1,13 +1,29 @@
 <?php
 
 namespace  CRUDServices\CRUDServiceTypes\DeletingServices\Traits;
+ 
+use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\DeletingStrategy;
 
 trait DeletingServiceCustomHooks
 {
 
-    protected function checkDeletingAdditionalConditions()  : bool
+    /**
+    * Methods For Customizing Some Operations If There Is Need To That
+    *
+    */
+    protected function doAfterOperationStart(DeletingStrategy $deletingStg): void
     {
-        return true;
+        return ;
     }
 
+    protected function doAfterDbTransactionStart(DeletingStrategy $deletingStg): void
+    {
+        return;
+    }
+    
+    protected function doBeforeDbTransactionCommiting(DeletingStrategy $deletingStg): void
+    {
+        return;
+    }
+   
 }
