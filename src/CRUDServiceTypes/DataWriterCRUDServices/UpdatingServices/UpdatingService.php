@@ -5,8 +5,7 @@ namespace CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\UpdatingServices;
 
 use CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\DataWriterCRUDService;
 use CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\UpdatingServices\Traits\RelationshipsUpdatingMethods;
-use CRUDServices\Helpers\Helpers;
-use CRUDServices\Traits\CRUDGeneralDBTransactionHooks;
+use CRUDServices\Helpers\Helpers; 
 use CRUDServices\ValidationManagers\ManagerTypes\UpdatingValidationManager;
 use CRUDServices\ValidationManagers\ValidationManager;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +16,7 @@ use Illuminate\Support\Facades\Response;
 
 abstract class UpdatingService extends DataWriterCRUDService
 {
-    use RelationshipsUpdatingMethods , CRUDGeneralDBTransactionHooks;
+    use RelationshipsUpdatingMethods ;
 
     abstract protected function getRequestClass() : string;
     abstract protected function getModelUpdatingFailingErrorMessage() : string;

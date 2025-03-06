@@ -5,8 +5,7 @@ namespace CRUDServices\CRUDServiceTypes\DeletingServices;
 use CRUDServices\CRUDService;
 use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\DeletingStrategy;
 use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\ForceDeletingStg;
-use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\SoftDeletingStg;
-use CRUDServices\CRUDServiceTypes\DeletingServices\Traits\DeletingServiceCustomHooks;
+use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\SoftDeletingStg; 
 use CRUDServices\CRUDServiceTypes\DeletingServices\Traits\HelperTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -16,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class DeletingService extends CRUDService
 {
-    use  HelperTrait,   DeletingServiceCustomHooks;
+    use  HelperTrait ;
     protected Collection  $modelsToDelete  ;
 
     protected bool $forcedDeletingOperation = true;
@@ -55,19 +54,19 @@ abstract class DeletingService extends CRUDService
     {
         if($this->deletingStrategy)
         {
-            $this->deletingStrategy->callAfterOperaionStart(function(DeletingStrategy $deletingStg)
+            $this->deletingStrategy->callAfterOperaionStart(function()
             {
-                $this->doAfterOperationStart($deletingStg);
+                $this->doAfterOperationStart();
             });
 
-            $this->deletingStrategy->callAfterDbTransactionStart(function(DeletingStrategy $deletingStg)
+            $this->deletingStrategy->callAfterDbTransactionStart(function()
             {
-                $this->doAfterDbTransactionStart($deletingStg);
+                $this->doAfterDbTransactionStart();
             });
 
-            $this->deletingStrategy->callBeforeDBTransactionCommiting(function(DeletingStrategy $deletingStg)
+            $this->deletingStrategy->callBeforeDBTransactionCommiting(function()
             {
-                $this->doBeforeDbTransactionCommiting($deletingStg);
+                $this->doBeforeDbTransactionCommiting();
             });
         }
     }
@@ -122,9 +121,7 @@ abstract class DeletingService extends CRUDService
     {
         try {
                 $this->setForcedDeletingStatus($forcedDeleting);
-
-                $this->doAfterOperationStart();
-
+ 
                 $this->DeleteConveniently();
 
                 $this->doBeforeSuccessResponding();

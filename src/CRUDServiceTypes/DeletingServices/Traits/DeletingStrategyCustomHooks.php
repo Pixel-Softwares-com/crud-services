@@ -15,7 +15,7 @@ trait DeletingStrategyCustomHooks
     {
         if(is_callable($this->callbackAfterOperationStart))
         {
-            call_user_func($this->callbackAfterOperationStart , $this);
+            call_user_func($this->callbackAfterOperationStart );
         }
     }
  
@@ -23,7 +23,7 @@ trait DeletingStrategyCustomHooks
     {
         if(is_callable($this->callbackAfterDBTransactionStart))
         {
-            call_user_func($this->callbackAfterDBTransactionStart , $this);
+            call_user_func($this->callbackAfterDBTransactionStart );
         }
     }
 
@@ -31,7 +31,7 @@ trait DeletingStrategyCustomHooks
     {
         if(is_callable($this->callbackBeforeDBTransactionCommiting))
         {
-            call_user_func($this->callbackBeforeDBTransactionCommiting , $this);
+            call_user_func($this->callbackBeforeDBTransactionCommiting );
         }
     }
 

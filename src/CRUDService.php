@@ -6,6 +6,7 @@ use AuthorizationManagement\PermissionExaminers\PermissionExaminer;
 use CRUDServices\FilesOperationsHandlers\FilesHandler;
 use CRUDServices\FilesOperationsHandlers\FilesUploadingHandler\FilesUploadingHandler;
 use CRUDServices\FilesOperationsHandlers\OldFilesDeletingHandler\OldFilesDeletingHandler;
+use CRUDServices\Traits\CRUDGeneralDBTransactionHooks;
 use CRUDServices\Traits\CRUDGeneralRespondingHooks;
 use CRUDServices\Traits\ResponseHelpers;
 use Exception;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class CRUDService
 {
-    use CRUDGeneralRespondingHooks , ResponseHelpers;
+    use CRUDGeneralRespondingHooks , CRUDGeneralDBTransactionHooks , ResponseHelpers;
 
     protected FilesHandler | FilesUploadingHandler | OldFilesDeletingHandler | null $filesHandler = null;
     protected ?Model $Model ;
