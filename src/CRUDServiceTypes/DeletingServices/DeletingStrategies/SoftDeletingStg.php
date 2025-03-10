@@ -40,15 +40,15 @@ class SoftDeletingStg extends DeletingStrategy
         try {
 
             DB::beginTransaction();
-            $this->doAfterOperationStart();
-            $this->doAfterDbTransactionStart();
+            
+            $this->onAfterDbTransactionStart();
 
             if( $modelClass::whereIn($modelKeyName , $keys )->update([ $modelDeletedAtColumn => now()  ]))
             {
                 $this->markAsDeleted($modelClass , $keys);
             }
 
-            $this->doBeforeDbTransactionCommiting();
+            $this->onBeforeDbCommit();
             DB::commit();
 
         }catch ( QueryException $exception)

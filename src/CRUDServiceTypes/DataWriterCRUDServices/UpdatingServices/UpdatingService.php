@@ -63,8 +63,7 @@ abstract class UpdatingService extends DataWriterCRUDService
 
             DB::beginTransaction();
             
-            $this->doAfterOperationStart();
-            $this->doAfterDbTransactionStart();
+            $this->onAfterDbTransactionStart();
 
             $this->updateModel();
 
@@ -75,7 +74,7 @@ abstract class UpdatingService extends DataWriterCRUDService
             $this->uploadFiles();
             $this->deleteOldFiles();
 
-            $this->doBeforeDbTransactionCommiting();
+            $this->onBeforeDbCommit();
 
             //If No Exception Is Thrown From Previous Operations ... All Thing Is OK
             //So Database Transaction Will Be Commit

@@ -11,18 +11,13 @@ trait CRUDGeneralDBTransactionHooks
     * Methods For Customizing Some Operations If There Is Need To That
     *
     */
-
-    protected function doAfterOperationStart(): void
-    {
-        return;
-    }
-
-    protected function doAfterDbTransactionStart(): void
+  
+    protected function onAfterDbTransactionStart(): void
     {
         return;
     }
     
-    protected function doBeforeDbTransactionCommiting(): void
+    protected function onBeforeDbCommit(): void
     {
         return;
     }

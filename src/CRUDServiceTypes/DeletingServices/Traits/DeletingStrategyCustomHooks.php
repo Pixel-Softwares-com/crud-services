@@ -4,22 +4,14 @@ namespace  CRUDServices\CRUDServiceTypes\DeletingServices\Traits;
   
 trait DeletingStrategyCustomHooks
 {
-    protected $callbackAfterOperationStart = null;
     protected $callbackAfterDBTransactionStart = null;
     protected $callbackBeforeDBTransactionCommiting = null;
     /**
     * Methods For Customizing Some Operations If There Is Need To That
     *
     */
-    protected function doAfterOperationStart(): void
-    {
-        if(is_callable($this->callbackAfterOperationStart))
-        {
-            call_user_func($this->callbackAfterOperationStart );
-        }
-    }
- 
-    protected function doAfterDbTransactionStart(): void
+   
+    protected function onAfterDbTransactionStart(): void
     {
         if(is_callable($this->callbackAfterDBTransactionStart))
         {
@@ -27,17 +19,12 @@ trait DeletingStrategyCustomHooks
         }
     }
 
-    protected function doBeforeDbTransactionCommiting(): void
+    protected function onBeforeDbCommit(): void
     {
         if(is_callable($this->callbackBeforeDBTransactionCommiting))
         {
             call_user_func($this->callbackBeforeDBTransactionCommiting );
         }
-    }
-
-    public function callAfterOperaionStart(callable $callback) : void
-    {
-        $this->callbackAfterOperationStart = $callback;
     }
  
     public function callAfterDbTransactionStart(callable $callback) : void

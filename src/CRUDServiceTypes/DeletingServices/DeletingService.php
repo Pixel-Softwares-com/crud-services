@@ -54,19 +54,15 @@ abstract class DeletingService extends CRUDService
     {
         if($this->deletingStrategy)
         {
-            $this->deletingStrategy->callAfterOperaionStart(function()
-            {
-                $this->doAfterOperationStart();
-            });
 
             $this->deletingStrategy->callAfterDbTransactionStart(function()
             {
-                $this->doAfterDbTransactionStart();
+                $this->onAfterDbTransactionStart();
             });
 
             $this->deletingStrategy->callBeforeDBTransactionCommiting(function()
             {
-                $this->doBeforeDbTransactionCommiting();
+                $this->onBeforeDbCommit();
             });
         }
     }
