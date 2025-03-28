@@ -5,7 +5,7 @@ namespace CRUDServices\CRUDComponents\CRUDRelationshipComponents;
 class OwnedRelationshipComponent extends RelationshipComponent
 {
 
-    protected bool $foreignKeyMustBeAppned = false;
+    protected bool $foreignKeyMustBeAppned = false; 
     protected array $updatingConditionColumns = [];
 
     public static function create(string $relationshipName , string $foreignKeyName) : OwnedRelationshipComponent
@@ -22,8 +22,7 @@ class OwnedRelationshipComponent extends RelationshipComponent
         $this->updatingConditionColumns = $updatingConditionColumns;
         return $this;
     }
-
-
+ 
     /**
      * @return array
      */
@@ -35,7 +34,7 @@ class OwnedRelationshipComponent extends RelationshipComponent
         }
         return $this->updatingConditionColumns;
     }
-
+  
     public function appendForignKeyToRequestData() : self
     {
         $this->foreignKeyMustBeAppned = true;

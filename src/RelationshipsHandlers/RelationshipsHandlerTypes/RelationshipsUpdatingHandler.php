@@ -55,7 +55,7 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
      * @param Model $model
      * @return void
      */
-    public function setPrimaryColumnName(Model $model): void
+    protected function setPrimaryColumnName(Model $model): void
     {
         $this->primaryColumnName = $model->getKeyName();
     }
@@ -63,7 +63,7 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
     /**
      * @return bool
      */
-    public function setModelClass(): bool
+    protected function setModelClass(): bool
     {
         if(!$this->modelsCollection){return false;}
 
@@ -205,7 +205,7 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
         return $this;
     }
 
-    protected function setDataCollection( Model $parentModel , string $relationship ) : self
+    protected function setRelationshipDataCollection( Model $parentModel , string $relationship ) : self
     {
         $modelOrCollection = $parentModel->{$relationship};
         if(!$modelOrCollection){return $this;}
@@ -218,23 +218,68 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
         return $this;
     }
 
-    protected function DataRowsArrayClassification(array $relationshipMultipleRows , array $updatingConditionColumns )  : self
+    protected function setUpdatingConditionColumns(OwnedRelationshipComponent $relationship)
     {
+        $this->updatingConditionColumns = $relationship->getUpdatingConditionColumns();
+    }
+
+    protected function classifyDataRowAsUpdatableModelData(array $dataRow) : void
+    {
+        $this->updatableModelsData[] = $dataRow;
+    }
+
+    protected function classifyDataRowAsNewData(array $dataRow) : void
+    {
+        if(!empty($dataRow))
+        {
+            $this->NewModelsData[] = $dataRow;
+        }
+    }
+
+    protected function classifyDataRowsAsNewData(array $dataRows) : void
+    {
+        foreach($dataRows as $dataRow)
+        {
+            $this->classifyDataRowAsNewData($dataRow);
+        }
+    }
+
+    protected function DataRowsArrayClassification(array $relationshipMultipleRows , OwnedRelationshipComponent $relationship )  : self
+    {
+        //no relation models is found in database , and there is a data comes to be inserted to databse
+        // => so we need to handle the data rows as a new data
+        if(!$this->modelsCollection && !empty($relationshipMultipleRows))
+        {
+            $this->classifyDataRowsAsNewData($relationshipMultipleRows);
+            return $this;
+        }
+ 
+        /**
+         * at this point of execution :
+         * - if the $modelsCollection is null => $relationshipMultipleRows is an empty array => no data row will be classified
+         * - if the $modelsCollection is not null and the $relationshipMultipleRows is an empty array 
+         * => no data row will be classified
+         * 
+         * result : the data rows will be classified only if there is a data && there are relationship models comes from DB
+        */
+        $this->setUpdatingConditionColumns($relationship);
+
         foreach ($relationshipMultipleRows as  $row)
         {
-            if(Arr::has($row , $updatingConditionColumns))
+            /**
+             * at this point of execution :
+             * there are relationship models comes from DB + there are data comes from request
+             * we need to separate the updatable data rows and mark the others as a new data 
+             * result : if any data row doesn't matter the condition bellow ... it is a new data row
+             */
+            if(Arr::has($row , $this->updatingConditionColumns))
             {
-                $this->updatableModelsData[] = $row;
+                $this->classifyDataRowAsUpdatableModelData($row);
                 continue;
             }
-
-            if(!empty($row))
-            {
-                $this->NewModelsData[] = $row;
-            }
-        }
-
-        $this->updatingConditionColumns = $updatingConditionColumns;
+ 
+            $this->classifyDataRowAsNewData($row); 
+        } 
 
         return $this;
     }
@@ -249,13 +294,17 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
     protected function OwnedRelationshipRowsChildClassHandling(Model $model, OwnedRelationshipComponent $relationship , array $relationshipMultipleRows   ) : void
     {
         $this->restartUpdater();
-        $this->DataRowsArrayClassification($relationshipMultipleRows , $relationship->getUpdatingConditionColumns() );
-        $this->setDataCollection($model , $relationship->getRelationshipName() )
-             ->CollectionModelsClassification()
+
+        //setting relationship models
+        $this->setRelationshipDataCollection($model , $relationship->getRelationshipName() );
+
+        $this->DataRowsArrayClassification($relationshipMultipleRows , $relationship )
+             ->CollectionModelsClassification()        
              ->prepareNewModelsToCreation($model, $relationship->getRelationshipName() );
         $this->deletedModelsHandling();
         $this->startToUpdateModels($this->UpdatableModelDataMap , $relationship);
     }
+
     protected function restartUpdater() : void
     {
         $this->UpdatableModelDataMap = [];

@@ -30,4 +30,24 @@ abstract class FilesHandler
     {
         return $model instanceof MustUploadModelFiles;
     }
+
+    static public function isItUploadedFilePropName(MustUploadModelFiles $model , string $propName) : bool
+    {
+        $filesInfoArray = $model->getModelFileInfoArray();
+        $filesInfoArray = array_filter($filesInfoArray , 'is_array');
+        
+        foreach($filesInfoArray as $filesInfoArray)
+        {
+            if(
+                ($subArray["ModelPathPropName"] ?? null ) === $propName
+                ||
+                ($subArray["RequestKeyName"] ?? null ) === $propName
+              )
+            {
+                return true;    
+            } 
+        }
+
+        return false;
+    }
 }
