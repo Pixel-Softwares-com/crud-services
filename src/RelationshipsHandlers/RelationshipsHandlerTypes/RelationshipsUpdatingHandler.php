@@ -62,6 +62,8 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
 
     /**
      * @return bool
+     * 
+     * once it return false .... there is no data in database ... so no need to delete any thing
      */
     protected function setModelClass(): bool
     {
@@ -80,19 +82,24 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
     protected function deletedModelsHandling() : bool
     {
         $deletedModelKeyValues = array_keys($this->DeletableModelsMap);
-        if(!empty($deletedModelKeyValues))
+        
+        /**
+         * - the condition only will be applied once deleting needed data are found + the model class is ready to use in deleting query  .
+         * - once there is a problem in setting model class ==> it will be because there is no data in database need to be deleted 
+         */
+        if(!empty($deletedModelKeyValues) && $this->setModelClass())
         {
-            if(!$this->setModelClass()){return false;}
 
             /** We Need To Get Old File's paths from the models before deleting them */
             $this->prepareModelOldFilesToDelete();
 
-            if(
-                $this->ModelClass::whereIn($this->primaryColumnName , $deletedModelKeyValues)->delete()
-            ){return true;}
-
-            Helpers::throwException( "Failed To Delete old Models");
+            if(! $this->ModelClass::whereIn($this->primaryColumnName , $deletedModelKeyValues)->delete() )
+            {
+                Helpers::throwException( "Failed To Delete old Models");
+            }
         }
+
+        //once no exception is thrown true will be return
         return true;
     }
 
