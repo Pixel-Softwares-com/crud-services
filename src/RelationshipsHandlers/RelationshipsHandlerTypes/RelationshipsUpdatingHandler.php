@@ -76,10 +76,9 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
     }
 
     /**
-     * @return bool
      * @throws Exception
      */
-    protected function deletedModelsHandling() : bool
+    protected function deletedModelsHandling() : void
     {
         $deletedModelKeyValues = array_keys($this->DeletableModelsMap);
         
@@ -98,9 +97,6 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
                 Helpers::throwException( "Failed To Delete old Models");
             }
         }
-
-        //once no exception is thrown true will be return
-        return true;
     }
 
     /**
