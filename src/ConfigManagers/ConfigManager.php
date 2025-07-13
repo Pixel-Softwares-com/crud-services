@@ -1,6 +1,7 @@
 <?php
 
 namespace CRUDServices\ConfigManagers;
+
 use CRUDServices\Helpers\Helpers;
 use Exception;
 
