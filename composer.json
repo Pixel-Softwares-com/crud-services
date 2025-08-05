@@ -12,6 +12,7 @@
   "require": {
     "php": "^8.2",
     "laravel/framework": "^12.0",
+    "mdr2025/pixel-macroable-extenders" : "^2.0",
     "pixel-softwares/authorization-management": "^2.0.0",
     "pixel-softwares/validator-lib": "^2.0.0",
     "pixel-softwares/custom-file-system": "^2.0.0",
@@ -45,6 +46,10 @@
     {
       "type": "vcs",
       "url": "git@github.com:Pixel-Softwares-com/file-info-data-manager.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:mdr2025/pixel-macroable-extenders.git"
     }
   ]
 }
