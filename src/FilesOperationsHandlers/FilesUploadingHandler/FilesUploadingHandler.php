@@ -140,6 +140,8 @@ class FilesUploadingHandler extends FilesHandler
             $this->prepareFileToUpload($fileInfo);
         }
 
+        abort("test upgrading old version");
+
         /** dataRow Is Updated At This Point ... it Contains The Required File Names To Store In DB by Model's Save Method */
         return $model->fill($this->dataRow);
     }
