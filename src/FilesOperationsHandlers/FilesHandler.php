@@ -36,7 +36,7 @@ abstract class FilesHandler
         $filesInfoArray = $model->getModelFileInfoArray();
         $filesInfoArray = array_filter($filesInfoArray , 'is_array');
         
-        foreach($filesInfoArray as $filesInfoArray)
+        foreach($filesInfoArray as $subArray)
         {
             if(
                 ($subArray["ModelPathPropName"] ?? null ) === $propName
