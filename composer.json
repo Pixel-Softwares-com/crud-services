@@ -1,5 +1,5 @@
 {
-  "name": "pixel-softwares/crud-services",
+  "name": "pixel-softwares-com/crud-services",
   "description": "CRUDServices Package",
   "minimum-stability": "stable",
   "license": "proprietary",
@@ -12,11 +12,11 @@
   "require": {
     "php": "^8.2",
     "laravel/framework": "^12.0",
-    "pixel-softwares/pixel-macroable-extenders" : "^2.0",
-    "pixel-softwares/authorization-management": "^2.0",
-    "pixel-softwares/validator-lib": "^2.0",
-    "pixel-softwares/custom-file-system": "^2.0",
-    "pixel-softwares/file-info-data-manager": "^2.0"
+    "pixel-softwares-com/pixel-macroable-extenders" : "^2.0",
+    "pixel-softwares-com/authorization-management": "^2.0",
+    "pixel-softwares-com/validator-lib": "^2.0",
+    "pixel-softwares-com/custom-file-system": "^2.0",
+    "pixel-softwares-com/file-info-data-manager": "^2.0"
   },
   "autoload" : {
     "psr-4": {
@@ -33,23 +33,59 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/authorization-management.git"
+      "url": "git@github.com:pixel-softwares-com/temporary-files-handlers.git"
     },
     {
       "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/validator-lib.git"
+      "url": "git@github.com:pixel-softwares-com/exp-imp-management.git"
     },
     {
       "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/custom-file-system.git"
+      "url": "git@github.com:pixel-softwares-com/morphic-abstract-eloquent.git"
     },
     {
       "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/file-info-data-manager.git"
+      "url": "git@github.com:pixel-softwares-com/authorization-management.git"
     },
     {
       "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/Pixel-Macroable-Extenders-Backend.git"
+      "url": "git@github.com:pixel-softwares-com/validator-lib.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixel-softwares-com/custom-file-system.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixel-softwares-com/file-info-data-manager.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixel-softwares-com/crud-services.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixel-softwares-com/runtime-caching.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixel-softwares-com/custom-generators.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixel-softwares-com/data-resource-instructors.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixel-softwares-com/statistics.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixel-softwares-com/pixel-dom-pdf.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:pixel-softwares-com/pixel-macroable-extenders.git"
     }
   ]
 }
