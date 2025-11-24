@@ -33,18 +33,6 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/temporary-files-handlers.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/exp-imp-management.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/morphic-abstract-eloquent.git"
-    },
-    {
-      "type": "vcs",
       "url": "git@github.com:Pixel-Softwares-com/authorization-management.git"
     },
     {
@@ -61,31 +49,7 @@
     },
     {
       "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/crud-services.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/runtime-caching.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/custom-generators.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/data-resource-instructors.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/statistics.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/pixel-dom-pdf.git"
-    },
-    {
-      "type": "vcs",
-      "url": "git@github.com:Pixel-Softwares-com/pixel-macroable-extenders.git"
+      "url": "git@github.com:Pixel-Softwares-com/Pixel-Macroable-Extenders-Backend.git"
     }
   ]
 }
