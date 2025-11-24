@@ -12,7 +12,7 @@
   "require": {
     "php": "^8.2",
     "laravel/framework": "^12.0",
-    "mdr2025/pixel-macroable-extenders" : "^2.0",
+    "pixel-softwares/pixel-macroable-extenders" : "^2.0",
     "pixel-softwares/authorization-management": "^2.0",
     "pixel-softwares/validator-lib": "^2.0",
     "pixel-softwares/custom-file-system": "^2.0",
@@ -33,6 +33,18 @@
   "repositories": [
     {
       "type": "vcs",
+      "url": "git@github.com:Pixel-Softwares-com/temporary-files-handlers.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:Pixel-Softwares-com/exp-imp-management.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:Pixel-Softwares-com/morphic-abstract-eloquent.git"
+    },
+    {
+      "type": "vcs",
       "url": "git@github.com:Pixel-Softwares-com/authorization-management.git"
     },
     {
@@ -49,7 +61,31 @@
     },
     {
       "type": "vcs",
-      "url": "git@github.com:mdr2025/pixel-macroable-extenders.git"
+      "url": "git@github.com:Pixel-Softwares-com/crud-services.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:Pixel-Softwares-com/runtime-caching.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:Pixel-Softwares-com/custom-generators.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:Pixel-Softwares-com/data-resource-instructors.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:Pixel-Softwares-com/statistics.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:Pixel-Softwares-com/pixel-dom-pdf.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:Pixel-Softwares-com/pixel-macroable-extenders.git"
     }
   ]
 }
