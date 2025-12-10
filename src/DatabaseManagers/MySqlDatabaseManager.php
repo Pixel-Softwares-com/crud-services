@@ -101,4 +101,9 @@ class MySqlDatabaseManager
             }
         });
     }
+
+    public static function makeSureToTurnOnForeignKeyChecks() : void
+    {
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+    }
 }
