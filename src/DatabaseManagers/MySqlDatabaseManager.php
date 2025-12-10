@@ -43,11 +43,54 @@ class MySqlDatabaseManager
         });
     }
 
-    public static function truncateDBTable(string $tableName , bool $stopingForeignKeyChecks = true) : void
+    public static function truncateDBTable(string $tableName) : void
+    {
+        static::tryInDBTransaction(function() use($tableName)
+        {
+            static::truncateTable($tableName);
+        });
+    }
+
+    protected static function rollbackTransaction() : void
+    {
+        DB::rollback();
+    }
+    
+    protected static function commitTransaction() : void
+    {
+        DB::commit();
+    }
+
+    protected static function beginTransaction() : void
+    {
+        DB::beginTransaction();
+    }
+    
+    protected static function tryInDBTransaction(callable $callback) : mixed
     {
         try{
-            DB::beginTransaction();
+            
+            static::beginTransaction();
 
+            $result = $callback();
+
+            static::commitTransaction();
+
+            return $result;
+
+        }catch(Throwable $exception)
+        {
+            static::rollbackTransaction();
+
+            throw $exception;
+        }
+
+    }
+
+    public static function deleteAllFromDBTable(string $tableName , bool $stopingForeignKeyChecks = true) : void
+    {
+        static::tryInDBTransaction(function() use($tableName , $stopingForeignKeyChecks)
+        {
             if($stopingForeignKeyChecks)
             {
                 static::deleteAllFromTableWithoutForeignKeyChecks($tableName);
@@ -56,13 +99,6 @@ class MySqlDatabaseManager
             {
                 static::deleteAllFromTable($tableName);
             }
-
-            DB::commit();
-
-        }catch(Throwable $exception)
-        {
-            DB::rollBack();
-            throw $exception;
-        }
+        });
     }
 }
