@@ -45,7 +45,7 @@ class MySqlDatabaseManager
 
     public static function truncateDBTable(string $tableName) : void
     {
-        static::tryInDBTransaction(function() use($tableName)
+        static::executeWithoutForeignKeyChecks(function() use ($tableName)
         {
             static::truncateTable($tableName);
         });
@@ -100,10 +100,5 @@ class MySqlDatabaseManager
                 static::deleteAllFromTable($tableName);
             }
         });
-    }
-
-    public static function makeSureToTurnOnForeignKeyChecks() : void
-    {
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 }
