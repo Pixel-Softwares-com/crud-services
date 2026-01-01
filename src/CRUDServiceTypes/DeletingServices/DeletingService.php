@@ -127,6 +127,7 @@ abstract class DeletingService extends CRUDService
 
         }catch (Exception $exception)
         { 
+            dd("test exception message");
                 $this->doBeforeErrorResponding($exception);
                 return $this->errorRespondingHandling($exception , $this->getNotDeletedArray());
 
