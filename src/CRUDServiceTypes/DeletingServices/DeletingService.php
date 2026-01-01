@@ -3,6 +3,7 @@
 namespace CRUDServices\CRUDServiceTypes\DeletingServices;
 
 use CRUDServices\CRUDService;
+use CRUDServices\CRUDExceptionHandlers\DeletingExceptionHandler;
 use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\DeletingStrategy;
 use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\ForceDeletingStg;
 use CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies\SoftDeletingStg; 
@@ -127,7 +128,13 @@ abstract class DeletingService extends CRUDService
 
         }catch (Exception $exception)
         { 
-            dd("test exception message " . $exception->getMessage());
+                // Try to handle the exception with DeletingExceptionHandler first
+                if ($handledResponse = DeletingExceptionHandler::handle($exception))
+                {
+                    return $handledResponse;
+                }
+
+                // If not handled by DeletingExceptionHandler, use default error handling
                 $this->doBeforeErrorResponding($exception);
                 return $this->errorRespondingHandling($exception , $this->getNotDeletedArray());
 
