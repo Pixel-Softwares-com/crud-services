@@ -117,7 +117,7 @@ abstract class ValidationManager
     {
         if(!empty($keyValidationRules))
         {
-            $this->validator->applyCustomRuleSet($keyValidationRules)->applyBailRule()->setRequestData($singleDataRow)->validate();
+            $this->validator->setRequestData($singleDataRow)->applyCustomRuleSet($keyValidationRules)->applyBailRule()->validate();
         }
     }
 
