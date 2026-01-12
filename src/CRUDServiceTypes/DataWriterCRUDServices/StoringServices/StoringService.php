@@ -5,7 +5,7 @@ namespace CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\StoringServices;
 use CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\DataWriterCRUDService;
 use CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\StoringServices\Traits\RelationshipsStoringMethods;
 use CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\StoringServices\Traits\StoringServiceAbstractMethods;
-use CRUDServices\Helpers\Helpers; 
+ 
 use CRUDServices\ValidationManagers\ManagerTypes\StoringValidationManager;
 use CRUDServices\ValidationManagers\ValidationManager;
 use Exception;
@@ -34,7 +34,7 @@ abstract class StoringService extends DataWriterCRUDService
         $ModelClass = $this->getModelClass();
         if (!class_exists($ModelClass))
         {
-            Helpers::throwException("The Given Model Class " . $ModelClass . " Is Not defined !");
+            throw new Exception("The Given Model Class " . $ModelClass . " Is Not defined !");
         }
 
         $this->ModelClass = $ModelClass;

@@ -5,7 +5,7 @@ namespace CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\UpdatingServices;
 
 use CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\DataWriterCRUDService;
 use CRUDServices\CRUDServiceTypes\DataWriterCRUDServices\UpdatingServices\Traits\RelationshipsUpdatingMethods;
-use CRUDServices\Helpers\Helpers; 
+ 
 use CRUDServices\ValidationManagers\ManagerTypes\UpdatingValidationManager;
 use CRUDServices\ValidationManagers\ValidationManager;
 use Illuminate\Database\Eloquent\Model;
@@ -47,7 +47,7 @@ abstract class UpdatingService extends DataWriterCRUDService
 
         if(!$this->Model->save())
         {
-            Helpers::throwException( $this->getModelUpdatingFailingErrorMessage());
+            throw new Exception( $this->getModelUpdatingFailingErrorMessage());
         }
         return $this->HandleModelRelationships($this->data , $this->Model);
     }

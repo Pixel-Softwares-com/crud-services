@@ -5,7 +5,7 @@ namespace CRUDServices\RelationshipsHandlers\RelationshipsHandlerTypes;
 use CRUDServices\CRUDComponents\CRUDRelationshipComponents\OwnedRelationshipComponent;
 use CRUDServices\CRUDComponents\CRUDRelationshipComponents\ParticipatingRelationshipComponent;
 use CRUDServices\FilesOperationsHandlers\FilesHandler;
-use CRUDServices\Helpers\Helpers;
+
 use CRUDServices\RelationshipsHandlers\RelationshipsHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -94,7 +94,7 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
 
             if(! $this->ModelClass::whereIn($this->primaryColumnName , $deletedModelKeyValues)->delete() )
             {
-                Helpers::throwException( "Failed To Delete old Models");
+                throw new Exception( "Failed To Delete old Models");
             }
         }
     }
@@ -113,7 +113,7 @@ class RelationshipsUpdatingHandler extends RelationshipsHandler
         $model = $this->ModelFilesHandling($model , $data);
         if(!$model->save())
         {
-            Helpers::throwException( "Failed To Update Relationship Entry !");
+            throw new Exception( "Failed To Update Relationship Entry !");
         }
         $this->HandleModelRelationships( $data ,  $model);
     }

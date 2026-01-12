@@ -2,7 +2,7 @@
 
 namespace CRUDServices\ConfigManagers;
 
-use CRUDServices\Helpers\Helpers;
+
 use Exception;
 
 class ConfigManager
@@ -74,8 +74,7 @@ class ConfigManager
         $configs = require $this->configFilePath;
         if(!is_array($configs))
         {
-            $exceptionClass = Helpers::getExceptionClass();
-            throw new $exceptionClass("CRUDServices config file must return an array of config values");
+            throw new Exception("CRUDServices config file must return an array of config values");
         }
         $this->configs = $configs;
     }
