@@ -4,8 +4,6 @@ namespace CRUDServices\CRUDExceptionHandlers;
 
 use Exception;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Response;
 use Throwable;
 
 class DeletingExceptionHandler extends CRUDExceptionHandler
@@ -78,7 +76,7 @@ class DeletingExceptionHandler extends CRUDExceptionHandler
     {
         $errorMessage = $exception->getMessage();
 
-        return (static::isItQueryException($exception) && ($exception->getCode() == 23000 || $exception->getCode() == '23000')) 
+        return (static::isItQueryException($exception) && $exception->getCode() == 23000) 
                 ||
                 str_contains($errorMessage, 'SQLSTATE[23000]')
                 ||
@@ -107,9 +105,9 @@ class DeletingExceptionHandler extends CRUDExceptionHandler
      */
     protected static function renderDeletingErrorResponse()
     {
-        return Response::error(
-            'This record is not available for deletion.',
-            422
-        );
+        return response()->json([
+            'status' => 'warning', //to know that this is will be warning in frontend
+            'message' => 'This record is not available for deletion.',
+        ], 422);
     }
 }
