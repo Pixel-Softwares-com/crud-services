@@ -3,6 +3,7 @@
 namespace CRUDServices\CRUDServiceTypes\DeletingServices\DeletingStrategies;
 
 
+use CRUDServices\Helpers\ActivityBatchHelper;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -40,7 +41,8 @@ class SoftDeletingStg extends DeletingStrategy
         try {
 
             DB::beginTransaction();
-            
+            ActivityBatchHelper::startBatch();
+
             $this->onAfterDbTransactionStart();
 
             if( $modelClass::whereIn($modelKeyName , $keys )->update([ $modelDeletedAtColumn => now()  ]))
@@ -50,11 +52,12 @@ class SoftDeletingStg extends DeletingStrategy
 
             $this->onBeforeDbCommit();
             DB::commit();
+            ActivityBatchHelper::endBatch();
 
         }catch ( QueryException $exception)
         {
-            
             DB::rollBack();
+            ActivityBatchHelper::endBatch();
 
             //want to get developement error in the development enviroment only ... it maybe a foreik key error 
             //so it can be fixed in the enviroment by editing the constrainst

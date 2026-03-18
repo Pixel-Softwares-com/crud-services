@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use CRUDServices\Helpers\ActivityBatchHelper;
 use Illuminate\Support\Facades\Response;
 
 abstract class UpdatingService extends DataWriterCRUDService
@@ -62,7 +63,8 @@ abstract class UpdatingService extends DataWriterCRUDService
             $this->startGeneralValidation()->setRequestValidData();
 
             DB::beginTransaction();
-            
+            ActivityBatchHelper::startBatch();
+
             $this->onAfterDbTransactionStart();
 
             $this->updateModel();
@@ -79,6 +81,7 @@ abstract class UpdatingService extends DataWriterCRUDService
             //If No Exception Is Thrown From Previous Operations ... All Thing Is OK
             //So Database Transaction Will Be Commit
             DB::commit();
+            ActivityBatchHelper::endBatch();
 
             $this->doBeforeSuccessResponding();
             //Response After getting Success
@@ -87,6 +90,7 @@ abstract class UpdatingService extends DataWriterCRUDService
         {
             //When An Exception Is Thrown ....  Database Transaction Will Be Rollback
             DB::rollBack();
+            ActivityBatchHelper::endBatch();
 
             $this->doBeforeErrorResponding($exception);
 

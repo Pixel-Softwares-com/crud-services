@@ -10,6 +10,7 @@ use CRUDServices\FilesOperationsHandlers\OldFilesDeletingHandler\OldFilesDeletin
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
+use CRUDServices\Helpers\ActivityBatchHelper;
 use Illuminate\Support\Facades\DB;
 
 class ForceDeletingStg extends  DeletingStrategy
@@ -39,7 +40,8 @@ class ForceDeletingStg extends  DeletingStrategy
     {
         try {
             DB::beginTransaction();
-            
+            ActivityBatchHelper::startBatch();
+
             $this->onAfterDbTransactionStart();
             
             $this->prepareModelFilesToDelete($model);
@@ -60,12 +62,12 @@ class ForceDeletingStg extends  DeletingStrategy
             //If No Exception Is Thrown From Previous Operations ... All Thing Is OK
             //So Database Transaction Will Be Commit
             DB::commit();
- 
+            ActivityBatchHelper::endBatch();
 
         }catch (Exception | QueryException $exception)
         {
-            //When An Exception Is Thrown ....  Database Transaction Will Be Rollback
             DB::rollBack();
+            ActivityBatchHelper::endBatch();
             $this->restartFilesDeleter(); 
             $this->throwIfInDebugingMode($exception);
         }
